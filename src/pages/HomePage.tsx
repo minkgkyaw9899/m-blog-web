@@ -1,9 +1,24 @@
-import React from 'react'
+import { AuthContext } from "@/context/authContext";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const HomePage = () => {
-  return (
-    <div>HomePage</div>
-  )
-}
+  const { token } = useContext(AuthContext);
+  const navigation = useNavigate();
 
-export default HomePage
+  useEffect(() => {
+    if (!token) {
+      navigation("/auth/sign-in");
+    }
+  }, [navigation, token]);
+
+  return (
+    <div>
+      {/* form  */}
+      <div></div>
+      {/* image */}
+    </div>
+  );
+};
+
+export default HomePage;

@@ -4,10 +4,11 @@ import AuthLayout from "./components/layout/AuthLayout";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
+import { AuthProvider } from "./provider/AuthProvider";
 
 const App = () => {
   return (
-    <>
+    <AuthProvider>
       <Routes>
         <Route index element={<HomePage />} />
         <Route element={<AuthLayout />}>
@@ -19,7 +20,7 @@ const App = () => {
         {/* <Route element={<NotFoundPage />} /> */}
       </Routes>
       <Toaster />
-    </>
+    </AuthProvider>
   );
 };
 
