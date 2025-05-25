@@ -1,6 +1,6 @@
 import { AuthContext } from "@/context/authContext";
-import { use, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { use, useState } from "react";
+import { Link } from "react-router";
 import LoginSvg from "@/assets/login.svg";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,7 +26,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const SignInPage = () => {
-  const { token, addUser, changeToken, saveAuthInfo } = use(AuthContext);
+  const { addUser, changeToken, saveAuthInfo } = use(AuthContext);
   const [isRememberMe, setIsRememberMe] = useState(false);
 
   const {
@@ -64,12 +64,6 @@ const SignInPage = () => {
       }
     },
   });
-
-  const navigation = useNavigate();
-
-  useEffect(() => {
-    if (token) navigation("/");
-  }, [navigation, token]);
 
   const onSubmit = (data: FormFields) => {
     mutate(data);

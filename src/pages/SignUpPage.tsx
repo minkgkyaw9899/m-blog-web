@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuthContext } from "@/context/authContext";
-import { use, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { use, useState } from "react";
+import { Link } from "react-router";
 import SingUpSvg from "@/assets/sign-up.svg";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CircleChevronRightIcon } from "lucide-react";
@@ -57,14 +57,8 @@ export type AuthResponse = {
 };
 
 const SignUpPage = () => {
-  const { token, addUser, changeToken, saveAuthInfo } = use(AuthContext);
+  const { addUser, changeToken, saveAuthInfo } = use(AuthContext);
   const [isRememberMe, setIsRememberMe] = useState(false);
-
-  const navigation = useNavigate();
-
-  useEffect(() => {
-    if (token) navigation("/");
-  }, [navigation, token]);
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ["sign-up"],

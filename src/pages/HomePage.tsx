@@ -1,22 +1,97 @@
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/authContext";
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { axiosInstance } from "@/lib/axiosInstance";
+import { useQuery } from "@tanstack/react-query";
+import { PlusCircleIcon } from "lucide-react";
+import { useContext } from "react";
+import { Link } from "react-router";
+import Lottie from "lottie-react";
+import LoadingAnimation from "@/assets/loading.json";
 
+type PostsResponse = {
+  meta: {
+    status: 200;
+    message: "Successfully get all posts";
+    limit: 10;
+    total: 3;
+    page: 1;
+    hasNextPage: false;
+    totalPages: 1;
+  };
+  data: {
+    id: number;
+    title: string;
+    content: string;
+    image: null | string;
+    updatedAt: Date;
+    createdAt: Date;
+    author: {
+      id: number;
+      name: string;
+      avatar: null | string;
+    };
+    totalLikes: number;
+    totalComments: number;
+  }[];
+};
 const HomePage = () => {
   const { token } = useContext(AuthContext);
-  const navigation = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      navigation("/auth/sign-in");
-    }
-  }, [navigation, token]);
+  const { isPending, data } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const response = await axiosInstance.get<PostsResponse>("/posts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    },
+  });
+
+  console.log("data", data);
 
   return (
-    <div>
-      {/* form  */}
-      <div></div>
-      {/* image */}
+    <div className="">
+      <section className="flex justify-between items-start">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Home</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
+        <Link to={"/post/create"}>
+          <Button>
+            <PlusCircleIcon />
+            Create Post
+          </Button>
+        </Link>
+      </section>
+
+      <section className="w-full py-10 h-full">
+        {isPending && (
+          <Lottie
+            className="h-64"
+            loop={true}
+            animationData={LoadingAnimation}
+          />
+        )}
+
+        {data &&
+          data.data.map((post) => (
+            <li>
+              <p>{post.title}</p>
+            </li>
+          ))}
+      </section>
     </div>
   );
 };

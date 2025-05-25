@@ -25,6 +25,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const removeUser = () => {
     setToken(undefined);
     setUser(undefined);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   const saveAuthInfo = (token: string, user: User) => {
