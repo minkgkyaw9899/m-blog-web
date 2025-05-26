@@ -11,10 +11,9 @@ import { useQuery } from "@tanstack/react-query";
 import { PlusCircleIcon } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "react-router";
-import Lottie from "lottie-react";
-import LoadingAnimation from "@/assets/loading.json";
+import MasonryGrid from "@/components/home/MasonryGrid";
 
-type PostsResponse = {
+export type PostsResponse = {
   meta: {
     status: 200;
     message: "Successfully get all posts";
@@ -55,8 +54,6 @@ const HomePage = () => {
     },
   });
 
-  console.log("data", data);
-
   return (
     <div className="">
       <section className="flex justify-between items-start">
@@ -77,20 +74,7 @@ const HomePage = () => {
       </section>
 
       <section className="w-full py-10 h-full">
-        {isPending && (
-          <Lottie
-            className="h-64"
-            loop={true}
-            animationData={LoadingAnimation}
-          />
-        )}
-
-        {data &&
-          data.data.map((post) => (
-            <li>
-              <p>{post.title}</p>
-            </li>
-          ))}
+        <MasonryGrid posts={data?.data} />
       </section>
     </div>
   );

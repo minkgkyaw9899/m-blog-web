@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
+import { queryClient } from "@/lib/queryClient";
 
 const formSchema = z.object({
   title: z
@@ -29,7 +30,7 @@ const formSchema = z.object({
   content: z
     .string({ required_error: "Content is required" })
     .min(10, "Content must be at least 10 characters")
-    .max(255, "Maximum 255 only"),
+    .max(5000, "Maximum 5000 only"),
 });
 
 type FormFields = z.infer<typeof formSchema>;
@@ -75,13 +76,16 @@ const CreatePostForm = () => {
       });
       return response.data;
     },
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       if (res.meta.status === 200) {
         toast.success(res.meta.message);
         otherFormField.reset();
-        return navigate("/", {
-          replace: true,
+        await queryClient.invalidateQueries({
+          queryKey: ["posts"],
         });
+        // return navigate("/", {
+        //   replace: true,
+        // });
       }
     },
     onError: (err) => {

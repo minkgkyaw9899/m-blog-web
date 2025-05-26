@@ -7,6 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { NavLink } from "react-router";
 
 const CreatePostPage = () => {
   return (
@@ -15,7 +16,9 @@ const CreatePostPage = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              <NavLink to={'/'}>
+                <BreadcrumbLink>Home</BreadcrumbLink>
+              </NavLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
