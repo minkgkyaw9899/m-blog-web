@@ -42,7 +42,7 @@ export type PostsResponse = {
 const HomePage = () => {
   const { token } = useContext(AuthContext);
 
-  const { isPending, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
       const response = await axiosInstance.get<PostsResponse>("/posts", {

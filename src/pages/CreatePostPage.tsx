@@ -2,7 +2,6 @@ import CreatePostForm from "@/components/create-post/CreatePostForm";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -16,9 +15,7 @@ const CreatePostPage = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <NavLink to={'/'}>
-                <BreadcrumbLink>Home</BreadcrumbLink>
-              </NavLink>
+              <NavLink to={"/"}>Home</NavLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

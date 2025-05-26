@@ -20,7 +20,6 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
-import { queryClient } from "@/lib/queryClient";
 
 const formSchema = z.object({
   title: z
@@ -80,12 +79,9 @@ const CreatePostForm = () => {
       if (res.meta.status === 200) {
         toast.success(res.meta.message);
         otherFormField.reset();
-        await queryClient.invalidateQueries({
-          queryKey: ["posts"],
+        return navigate("/", {
+          replace: true,
         });
-        // return navigate("/", {
-        //   replace: true,
-        // });
       }
     },
     onError: (err) => {
