@@ -7,11 +7,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/authContext";
 import { axiosInstance } from "@/lib/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { PlusCircleIcon } from "lucide-react";
 import { useContext } from "react";
 import { Link } from "react-router";
 import MasonryGrid from "@/components/home/MasonryGrid";
+import Lottie from "lottie-react";
+import AnimationData from "@/assets/loading.json";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 export type PostsResponse = {
   meta: {
@@ -42,17 +50,46 @@ export type PostsResponse = {
 const HomePage = () => {
   const { token } = useContext(AuthContext);
 
-  const { data } = useQuery({
+  // const { data } = useQuery({
+  //   queryKey: ["posts"],
+  //
+  // });
+
+  const {
+    data,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    hasPreviousPage,
+    fetchPreviousPage,
+  } = useInfiniteQuery({
     queryKey: ["posts"],
-    queryFn: async () => {
-      const response = await axiosInstance.get<PostsResponse>("/posts", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    queryFn: async ({ pageParam }) => {
+      const response = await axiosInstance.get<PostsResponse>(
+        `/posts?page=${pageParam}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     },
+    initialPageParam: 1,
+    getNextPageParam: (res) => {
+      return res.meta.hasNextPage ? res.meta.page + 1 : undefined;
+    },
   });
+
+  if (isPending) {
+    return (
+      <div className="flex items-center justify-center">
+        <Lottie animationData={AnimationData} />
+      </div>
+    );
+  }
+
+  console.log("data", data);
 
   return (
     <div className="">
@@ -60,12 +97,12 @@ const HomePage = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage>Home</BreadcrumbPage>
+              <BreadcrumbPage>Posts</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <Link to={"/post/create"}>
+        <Link to={"/posts/create"}>
           <Button>
             <PlusCircleIcon />
             Create Post
@@ -73,8 +110,38 @@ const HomePage = () => {
         </Link>
       </section>
 
-      <section className="w-full py-10 h-full">
-        <MasonryGrid posts={data?.data} />
+      <section className="w-full pt-10 mb-4 h-full">
+        <MasonryGrid posts={data?.pages?.flatMap((page) => page.data)} />
+        <Pagination>
+          <PaginationContent>
+            {/* <PaginationItem>
+              <PaginationPrevious
+                onClick={() => hasPreviousPage && fetchPreviousPage()}
+              />
+            </PaginationItem> */}
+            <PaginationItem>
+              <PaginationNext onClick={() => hasNextPage && fetchNextPage()} />
+            </PaginationItem>
+
+            {/* <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem> */}
+          </PaginationContent>
+        </Pagination>
       </section>
     </div>
   );

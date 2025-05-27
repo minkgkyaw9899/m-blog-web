@@ -12,6 +12,7 @@ import HomeLayout from "./components/layout/HomeLayout";
 import AboutUsPage from "./pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import CreatePostPage from "./pages/CreatePostPage";
+import PostDetailPage from "./pages/PostDetailPage";
 
 const App = () => {
   return (
@@ -20,7 +21,11 @@ const App = () => {
         <Routes>
           <Route element={<HomeLayout />}>
             <Route index element={<HomePage />} />
-            <Route path="post/create" element={<CreatePostPage />} />
+            {/*  */}
+            <Route path={"posts"}>
+              <Route path="create" element={<CreatePostPage />} />
+              <Route path=":postId" element={<PostDetailPage />} />
+            </Route>
             <Route path="about-us" element={<AboutUsPage />} />
             <Route path="contact-us" element={<ContactUsPage />} />
           </Route>

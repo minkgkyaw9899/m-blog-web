@@ -15,7 +15,7 @@ const CreatePostPage = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <NavLink to={"/"}>Home</NavLink>
+              <NavLink to={"/"}>Posts</NavLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

@@ -16,7 +16,7 @@ const Navigation = () => {
             href="/"
             className={navigationMenuTriggerStyle()}
           >
-            Home
+            Posts
           </NavigationMenuLink>
         </NavigationMenuItem>
 
